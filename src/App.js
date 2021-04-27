@@ -1,25 +1,53 @@
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import {Layout, Menu} from "antd";
+import Vaccinated from './Vaccinated';
+import ICU from './ICU';
+import Demo from './Demo';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const { Header, Content, Footer } = Layout;
+
+class App extends Component {
+    state = {
+        current: 'vaccinated',
+    };
+
+    handleClick = (e) => {
+        console.log('click ', e);
+        this.setState({
+            current: e.key,
+        });
+    };
+
+    render() {
+        return (
+            <Layout>
+                <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+                    <div className="logo" />
+                    <Menu
+                        theme="dark"
+                        mode="horizontal"
+                        style={{ lineHeight: '64px' }}
+                        onClick={this.handleClick}
+                        selectedKeys={this.state.current}
+                    >
+                        <Menu.Item key="vaccinated"> Track COVID by state </Menu.Item>
+                        <Menu.Item key="demographics"> Demographics </Menu.Item>
+                        <Menu.Item key="icu"> ICU capacity by county </Menu.Item>
+                    </Menu>
+                </Header>
+                <Content style={{ padding: '0 50px', marginTop: 64 }}>
+                    {this.state.current === "vaccinated" && <Vaccinated />}
+                    {this.state.current === "demographics" && <Demo />}
+                    {this.state.current === "icu" && <ICU />}
+                </Content>
+                <Footer style={{ textAlign: 'center' }}>
+                    CIS550 Project by Yuexin Xu, Hui Miao, Xiaoyu Gong
+
+                </Footer>
+            </Layout>
+        );
+    }
 }
 
 export default App;
